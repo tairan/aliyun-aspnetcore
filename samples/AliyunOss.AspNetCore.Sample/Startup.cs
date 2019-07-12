@@ -27,11 +27,15 @@ namespace AliyunOss.AspNetCore.Sample
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAliyunOssClient(options => 
+            services.AddAliyunOssClient(options =>
             {
                 options.Endpoint = "oss-cn-hangzhou-internal.aliyuncs.com";
                 options.AppKeyId = "yourAccessKeyId";
                 options.AppKeySecret = "yourAccessKeySecret";
+            },
+            config =>
+            {
+                config.IsCname = false;
             });
         }
 

@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Aliyun.OSS;
-
+using Aliyun.OSS.Common;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,12 +12,21 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddAliyunOssClient(this IServiceCollection services, Action<OssClientOptions> configureOptions)
         {
+            services.AddAliyunOssClient(configureOptions, config => new ClientConfiguration { });
+
+            return services;
+        }
+
+        public static IServiceCollection AddAliyunOssClient(this IServiceCollection services, Action<OssClientOptions> configureOptions, Action<ClientConfiguration> configreClientConfiguration)
+        {
             var options = new OssClientOptions { };
+            var config = new ClientConfiguration { };
 
             configureOptions?.Invoke(options);
-            
-            services.AddSingleton<IOss>(sp => new OssClient(options.Endpoint, options.AppKeyId, options.AppKeySecret));
-            
+            configreClientConfiguration?.Invoke(config);
+
+            services.AddSingleton<IOss>(sp => new OssClient(options.Endpoint, options.AppKeyId, options.AppKeySecret, config));
+
             return services;
         }
     }
