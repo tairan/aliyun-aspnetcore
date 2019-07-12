@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Aliyun.OSS;
 
 
@@ -14,9 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new OssClientOptions { };
 
             configureOptions?.Invoke(options);
-
-            services.AddOptions<OssClientOptions>();
-            services.Configure(configureOptions);
+            
             services.AddSingleton<IOss>(sp => new OssClient(options.Endpoint, options.AppKeyId, options.AppKeySecret));
             
             return services;
