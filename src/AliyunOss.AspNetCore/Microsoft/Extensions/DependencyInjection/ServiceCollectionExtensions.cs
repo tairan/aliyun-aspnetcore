@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions?.Invoke(options);
             configreClientConfiguration?.Invoke(config);
 
-            services.AddSingleton<IOss>(sp => new OssClient(options.Endpoint, options.AppKeyId, options.AppKeySecret, config));
+            services.TryAddSingleton<IOss>(sp => new OssClient(options.Endpoint, options.AppKeyId, options.AppKeySecret, config));
 
             return services;
         }
